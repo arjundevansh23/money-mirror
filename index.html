@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Money Mirror</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="app">
+
+<!-- HOME TAB -->
+<div class="tab on" id="tab-home">
+  <div class="nav-bar">
+    <div class="nav-greeting">Good morning,<br><em>Riya.</em></div>
+    <div class="nav-avatar">RK</div>
+  </div>
+  <div class="hero">
+    <div class="hero-orb1"></div><div class="hero-orb2"></div>
+    <div class="hero-lbl">Total spent · March 2026</div>
+    <div class="hero-amt" id="hero-total">₹0</div>
+    <div class="hero-sub" id="hero-sub">Monthly income ₹55,000 · saved ₹6,200</div>
+    <div class="hero-pills">
+      <div class="pill pill-food" id="hero-pill-food">34% food</div>
+      <div class="pill pill-save" id="hero-pill-save">11% savings</div>
+      <div class="pill pill-grade">B+ grade</div>
+    </div>
+  </div>
+  <div class="sec-head">
+    <div class="sec-title">Spending</div>
+    <div class="sec-link" id="spend-toggle" onclick="toggleExtra()">See all</div>
+  </div>
+  <div style="padding:0 20px 8px;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);">March 2026 · Tap a card to explore</div>
+  <div class="cat-grid" id="cat-grid"></div>
+  <div class="sec-head"><div class="sec-title">Breakdown</div><div class="sec-link">Details</div></div>
+  <div class="breakdown-wrap">
+    <div class="breakdown-inner">
+      <svg id="donut-svg" width="88" height="88" viewBox="0 0 88 88" style="flex-shrink:0;"></svg>
+      <div class="legend" id="donut-legend"></div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-title">6-month trend</div><div class="sec-link">Full history</div></div>
+  <div class="trend-wrap">
+    <div class="trend-bars">
+      <div class="trend-col"><div class="trend-bar" style="height:42px"></div><div class="trend-mo">Oct</div></div>
+      <div class="trend-col"><div class="trend-bar" style="height:55px"></div><div class="trend-mo">Nov</div></div>
+      <div class="trend-col"><div class="trend-bar" style="height:38px"></div><div class="trend-mo">Dec</div></div>
+      <div class="trend-col"><div class="trend-bar" style="height:50px"></div><div class="trend-mo">Jan</div></div>
+      <div class="trend-col"><div class="trend-bar" style="height:46px"></div><div class="trend-mo">Feb</div></div>
+      <div class="trend-col"><div class="trend-bar active" style="height:64px"></div><div class="trend-mo active">Mar</div></div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-title">AI insights</div><div class="sec-link" onclick="nav('insights')">See all</div></div>
+  <div class="insight-list" id="home-insights"></div>
+  <div class="sec-head"><div class="sec-title">Future self</div><div class="sec-link">Adjust</div></div>
+  <div class="future-wrap">
+    <div class="future-wm">20yr</div>
+    <div class="future-lbl">20-year projection · 12% index fund return</div>
+    <div class="future-grid">
+      <div class="future-box"><div class="future-box-lbl">Current path</div><div class="future-box-val" id="home-future-cur">₹0</div><div class="future-box-sub">at current savings</div></div>
+      <div class="future-box"><div class="future-box-lbl">If leaks fixed</div><div class="future-box-val" id="home-future-opt">₹0</div><div class="future-box-sub">invest overspend too</div></div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-title">Spending personality</div></div>
+  <div class="pers-grid" id="home-personality"></div>
+  <div class="sec-head"><div class="sec-title">Goals</div><div class="sec-link" onclick="nav('goals')">See all</div></div>
+  <div class="goals-preview" id="home-goals"></div>
+  <div class="sec-head"><div class="sec-title">Monthly report card</div></div>
+  <div class="report-wrap">
+    <div class="report-top">
+      <div class="report-grade" id="home-grade">B+</div>
+      <div><div class="report-title" id="home-grade-title">Good progress, Riya!</div><div class="report-hint" id="home-grade-hint">Up from B last month.</div></div>
+    </div>
+    <div class="report-metrics" id="home-report-metrics"></div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+
+<!-- EXPENSES TAB -->
+<div class="tab" id="tab-expenses">
+  <div class="page-head">
+    <div class="page-title">Expenses</div>
+    <button class="add-btn" onclick="openAddExp()">＋ Add</button>
+  </div>
+  <div class="sum-row">
+    <div class="sum-card sum-spent"><div class="sum-val" id="exp-total">₹0</div><div class="sum-lbl">Spent</div></div>
+    <div class="sum-card sum-income"><div class="sum-val">₹55,000</div><div class="sum-lbl">Income</div></div>
+    <div class="sum-card sum-txns"><div class="sum-val" id="exp-count">0 txns</div><div class="sum-lbl">This month</div></div>
+  </div>
+  <div id="exp-list"></div>
+  <div style="height:20px"></div>
+</div>
+
+<!-- INSIGHTS TAB -->
+<div class="tab" id="tab-insights">
+  <div class="page-head" style="display:block;padding:24px 20px 0;">
+    <div class="page-title">Insights</div>
+    <div class="page-sub">Powered by your spending data</div>
+  </div>
+  <div class="health-hero">
+    <div class="hh-orb1"></div><div class="hh-orb2"></div>
+    <div class="hh-top">
+      <div class="hh-ring" id="ins-ring">
+        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(250,247,242,0.08)" stroke-width="7"/><circle cx="32" cy="32" r="26" fill="none" stroke="#c49a6c" stroke-width="7" stroke-dasharray="114 163" stroke-dashoffset="41" stroke-linecap="round"/></svg>
+        <div class="hh-ring-lbl"><div class="hh-score" id="ins-score">70</div><div class="hh-denom">/100</div></div>
+      </div>
+      <div><div class="hh-title" id="ins-health-title">Financial health: Good</div><div class="hh-desc" id="ins-health-desc">Saving consistently but overspending on food and subscriptions.</div></div>
+    </div>
+    <div class="hh-grid" id="ins-health-grid"></div>
+  </div>
+  <div class="sub-tabs-wrap">
+    <div class="sub-tabs">
+      <button class="stab on" onclick="showSec(0,this)">Alerts</button>
+      <button class="stab" onclick="showSec(1,this)">Benchmarks</button>
+      <button class="stab" onclick="showSec(2,this)">Habits</button>
+      <button class="stab" onclick="showSec(3,this)">Opportunity</button>
+      <button class="stab" onclick="showSec(4,this)">Projections</button>
+    </div>
+  </div>
+  <div class="isec on" id="isec0"><div class="card-list" id="ins-alerts"></div></div>
+  <div class="isec" id="isec1"><div class="card-list" id="ins-bench"></div></div>
+  <div class="isec" id="isec2"><div class="card-list" id="ins-habits"></div></div>
+  <div class="isec" id="isec3"><div class="card-list" id="ins-opp"></div></div>
+  <div class="isec" id="isec4"><div class="card-list" id="ins-proj"></div></div>
+  <div style="height:8px"></div>
+</div>
+
+<!-- INVEST TAB -->
+<div class="tab" id="tab-invest">
+  <div class="page-head">
+    <div class="page-title">Invest</div>
+    <div class="month-badge">March 2026</div>
+  </div>
+  <div class="inv-hero">
+    <div class="inv-orb1"></div><div class="inv-orb2"></div>
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;position:relative;">If you fix your leaks this month</div>
+    <div style="font-family:'DM Serif Display',serif;font-size:44px;color:var(--surface);line-height:1;margin-bottom:4px;position:relative;" id="inv-hero-amt">₹4,600</div>
+    <div style="font-size:12px;color:var(--tan);font-weight:300;margin-bottom:18px;position:relative;" id="inv-hero-sub">is sitting on the table, uninvested</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;">
+      <div class="hg-box"><div class="hg-val up" id="inv-hero-10yr">₹10.6L</div><div class="hg-lbl">in 10 years at 12%</div></div>
+      <div class="hg-box"><div class="hg-val warn" id="inv-hero-cur">₹0</div><div class="hg-lbl">currently invested</div></div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-title">Based on your spending</div><div style="font-size:11px;color:var(--ink3);font-weight:300;">3 things to fix</div></div>
+  <div style="padding:0 16px;display:flex;flex-direction:column;gap:12px;">
+    <div class="ic"><div class="ic-head"><div class="ic-ico i-red">🍕</div><div class="ic-meta"><div class="ic-tag t-warn">Overspending on food</div><div class="ic-title">Cut delivery by half, invest the rest</div></div></div><div class="ic-body">You're spending <span class="r">₹3,150 more</span> on food than peers. Reducing delivery from daily to alternate saves ₹1,500/mo.</div><div class="ibox"><div class="ibox-row"><div class="ibox-lbl">Monthly overspend</div><div class="ibox-val" style="color:#c04030">₹3,150</div></div><div class="ibox-row"><div class="ibox-lbl">Easy cut</div><div class="ibox-val">₹1,500 freed</div></div><div class="ibox-row"><div class="ibox-lbl">SIP in 10 years</div><div class="ibox-val" style="color:#2a7a48">₹3.5 lakhs</div></div></div></div>
+    <div class="ic"><div class="ic-head"><div class="ic-ico i-purple">📱</div><div class="ic-meta"><div class="ic-tag t-warn">Unused subscriptions</div><div class="ic-title">Cancel 2 subs you don't use</div></div></div><div class="ic-body">Hotstar and Notion haven't been opened in 18+ days. That's <span class="r">₹899/mo</span> going nowhere. Cancel both today.</div><div class="ibox"><div class="ibox-row"><div class="ibox-lbl">Hotstar + Notion</div><div class="ibox-val" style="color:#c04030">₹899/mo</div></div><div class="ibox-row"><div class="ibox-lbl">SIP in 10 years</div><div class="ibox-val" style="color:#2a7a48">₹2.1 lakhs</div></div></div></div>
+    <div class="ic"><div class="ic-head"><div class="ic-ico i-amber">🛍️</div><div class="ic-meta"><div class="ic-tag t-warn">Late-night shopping</div><div class="ic-title">Set a ₹2,500 monthly shopping cap</div></div></div><div class="ic-body">Shopping jumped 24% from late-night orders. Capping at ₹2,500 saves ₹900/mo.</div><div class="ibox"><div class="ibox-row"><div class="ibox-lbl">Current spend</div><div class="ibox-val" style="color:#c04030">₹3,400/mo</div></div><div class="ibox-row"><div class="ibox-lbl">Suggested cap</div><div class="ibox-val">₹2,500/mo</div></div></div></div>
+  </div>
+  <div class="sec-head" style="padding-top:22px;"><div class="sec-title">What to do with it</div></div>
+  <div class="ic-dark">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;">The simplest investing plan</div>
+    <div class="ic-title-lt" style="margin-bottom:8px;">Start one SIP. That's it.</div>
+    <div class="ic-body-lt" style="margin-bottom:14px;">Pick any Nifty 50 index fund. Set up a ₹1,500/mo SIP. It auto-debits monthly. Just let it run.</div>
+    <div class="ibox-dk">
+      <div class="ibox-row"><div class="ibox-lbl-lt">Recommended fund</div><div class="ibox-val-lt">UTI Nifty 50 Index</div></div>
+      <div class="ibox-row"><div class="ibox-lbl-lt">Monthly amount</div><div class="ibox-val-lt">₹1,500 to start</div></div>
+      <div class="ibox-row"><div class="ibox-lbl-lt">In 10 years</div><div class="ibox-val-lt" style="color:#80d0a0">₹3.5 lakhs</div></div>
+      <div class="ibox-row"><div class="ibox-lbl-lt">In 20 years</div><div class="ibox-val-lt" style="color:#80d0a0">₹14.9 lakhs</div></div>
+    </div>
+  </div>
+  <div style="padding-top:12px;">
+    <div class="ic-tan">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(254,250,224,0.55);margin-bottom:8px;">The bottom line</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--surface);margin-bottom:8px;line-height:1.2;">Fix food + subs. Start a ₹1,500 SIP. That's the whole plan.</div>
+      <div style="font-size:12px;color:rgba(254,250,224,0.65);font-weight:300;line-height:1.6;">₹1,500/mo at 12% over 20 years is <span style="color:#fefae0;font-weight:500;">₹14.9 lakhs</span>.</div>
+    </div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+
+<!-- GOALS TAB -->
+<div class="tab" id="tab-goals">
+  <div class="page-head">
+    <div class="page-title">Goals</div>
+    <button class="add-btn" onclick="openAddGoal()">＋ Add goal</button>
+  </div>
+  <div class="goals-hero">
+    <div class="gh-orb1"></div><div class="gh-orb2"></div>
+    <div class="gh-lbl">Total saved towards goals</div>
+    <div class="gh-row"><div class="gh-val" id="gh-val">₹0</div><div class="gh-of" id="gh-of">of ₹0</div></div>
+    <div class="gh-sub" id="gh-sub">0 active goals</div>
+    <div class="gh-grid">
+      <div class="ghg-box"><div class="ghg-val up" id="gh-saved">₹0</div><div class="ghg-lbl">Saved total</div></div>
+      <div class="ghg-box"><div class="ghg-val" id="gh-nearest">—</div><div class="ghg-lbl">Nearest goal</div></div>
+      <div class="ghg-box"><div class="ghg-val up" id="gh-active">0</div><div class="ghg-lbl">Active</div></div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-title">Active goals</div><div style="font-size:11px;color:var(--ink3);font-weight:300;">tap to edit</div></div>
+  <div id="goals-active"></div>
+  <div class="add-goal-card" onclick="openAddGoal()">
+    <div class="ag-ico">+</div>
+    <div class="ag-title">Add a new goal</div>
+    <div class="ag-sub">Laptop, house, vacation, anything</div>
+  </div>
+  <div id="goals-done-wrap" style="display:none;">
+    <div style="padding:22px 20px 12px;font-family:'DM Serif Display',serif;font-size:18px;color:var(--ink);">Completed</div>
+    <div id="goals-done"></div>
+  </div>
+  <div style="height:8px"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="ni on" id="nav-home" onclick="nav('home')"><div class="ico">🏠</div><div class="lbl" style="display:none">Home</div></div>
+  <div class="ni" id="nav-expenses" onclick="nav('expenses')"><div class="ico">💳</div><div class="lbl">Expenses</div></div>
+  <div class="ni" id="nav-insights" onclick="nav('insights')"><div class="ico">✦</div><div class="lbl">Insights</div></div>
+  <div class="ni" id="nav-invest" onclick="nav('invest')"><div class="ico">📈</div><div class="lbl">Invest</div></div>
+  <div class="ni" id="nav-goals" onclick="nav('goals')"><div class="ico">🎯</div><div class="lbl">Goals</div></div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="modal-overlay" id="exp-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="exp-modal-ttl">Add expense</div>
+    <label class="field-lbl">Amount</label>
+    <input class="field-input" id="f-amt" type="number" placeholder="0" style="font-family:'DM Serif Display',serif;font-size:24px;">
+    <label class="field-lbl">Description</label>
+    <input class="field-input" id="f-desc" type="text" placeholder="What did you spend on?">
+    <div class="field-row">
+      <input class="field-input" id="f-date" type="date">
+      <input class="field-input" id="f-time" type="time">
+    </div>
+    <label class="field-lbl" style="margin-bottom:8px;">Category</label>
+    <div class="cat-chips" id="exp-cats">
+      <button class="cat-chip sel" onclick="pickCat(this)">Food</button>
+      <button class="cat-chip" onclick="pickCat(this)">Transport</button>
+      <button class="cat-chip" onclick="pickCat(this)">Shopping</button>
+      <button class="cat-chip" onclick="pickCat(this)">Living</button>
+      <button class="cat-chip" onclick="pickCat(this)">Utilities</button>
+      <button class="cat-chip" onclick="pickCat(this)">Lifestyle</button>
+      <button class="cat-chip" onclick="pickCat(this)">Health</button>
+      <button class="cat-chip" onclick="pickCat(this)">Finance</button>
+      <button class="cat-chip" onclick="pickCat(this)">Other</button>
+    </div>
+    <div id="subcat-wrap" style="margin-top:12px;">
+      <label class="field-lbl" style="margin-bottom:8px;">Subcategory</label>
+      <div class="cat-chips" id="exp-subcats"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-danger" id="exp-del" style="display:none;" onclick="delExp()">Delete</button>
+      <button class="btn-primary" onclick="saveExp()">Save expense</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL MODAL -->
+<div class="modal-overlay" id="goal-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="goal-modal-ttl">New goal</div>
+    <label class="field-lbl">Goal name</label>
+    <input class="field-input" id="g-name" type="text" placeholder="e.g. Trip to Japan">
+    <label class="field-lbl">Target amount</label>
+    <input class="field-input" id="g-target" type="number" placeholder="0" style="font-family:'DM Serif Display',serif;font-size:22px;">
+    <label class="field-lbl">Amount saved so far</label>
+    <input class="field-input" id="g-saved" type="number" placeholder="0">
+    <label class="field-lbl">Target date</label>
+    <input class="field-input" id="g-date" type="month" style="margin-bottom:12px;">
+    <label class="field-lbl" style="margin-bottom:8px;">Pick an icon</label>
+    <div class="emoji-grid" id="goal-emojis">
+      <div class="emoji-opt sel" onclick="pickEmoji(this)">🌴</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🏠</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">💻</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🚗</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">💍</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🎓</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">📱</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🏋️</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🎸</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🐶</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">✈️</div>
+      <div class="emoji-opt" onclick="pickEmoji(this)">🌟</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-danger" id="goal-del" style="display:none;" onclick="delGoal()">Delete</button>
+      <button class="btn-primary" onclick="saveGoal()">Save goal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD FUNDS MODAL -->
+<div class="modal-overlay" id="funds-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="funds-modal-ttl">Add funds</div>
+    <div style="background:var(--surface);border:0.5px solid var(--wheat);border-radius:16px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:11px;color:var(--ink3);font-weight:300;margin-bottom:3px;">Currently saved</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);" id="funds-saved-display">₹0</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:var(--ink3);font-weight:300;margin-bottom:3px;">Target</div>
+        <div style="font-size:15px;font-weight:500;color:var(--ink2);" id="funds-target-display">₹0</div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="height:5px;background:var(--wheat);border-radius:100px;overflow:hidden;">
+        <div id="funds-progress-bar" style="height:100%;border-radius:100px;background:var(--tan);width:0%;transition:width 0.3s;"></div>
+      </div>
+    </div>
+    <label class="field-lbl">Amount to add</label>
+    <input class="field-input" id="funds-amt" type="number" placeholder="₹ 0" style="font-family:'DM Serif Display',serif;font-size:28px;" oninput="previewFunds()">
+    <div id="funds-preview" style="display:none;background:var(--surface);border:0.5px solid var(--wheat);border-radius:14px;padding:12px 16px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;">
+        <span style="color:var(--ink3);font-weight:300;">New total</span>
+        <span style="font-weight:500;color:var(--ink);" id="funds-new-total">₹0</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;">
+        <span style="color:var(--ink3);font-weight:300;">Still needed</span>
+        <span style="font-weight:500;" id="funds-still-needed">₹0</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;">
+        <span style="color:var(--ink3);font-weight:300;">Progress</span>
+        <span style="font-weight:500;color:var(--tan);" id="funds-new-pct">0%</span>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="saveFunds()" style="width:100%;">Add to goal</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+</div>
+
+<script src="app.js"></script>
+</html>
