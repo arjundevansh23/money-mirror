@@ -28,7 +28,7 @@ Learning happens through your own real data, in context, not in a classroom.
 No install, no setup, no dependencies.
 
 **Option 1 — Live demo:**  
-👉 [your vercel URL here]
+👉 money-mirror-pink.vercel.app
 
 **Option 2 — Run locally:**
 1. Download or clone this repo
